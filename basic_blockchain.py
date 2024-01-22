@@ -1,13 +1,12 @@
 # Import Libraries
 
 # this is a comment 
-
 import datetime
 import hashlib
 import json
 import random
 from flask import Flask, jsonify
-import matplotlib as plt 
+import matplotlib.pyplot as plt 
 import time
 transactions = []
 people = ["Danny","Sam","Alan","Justice","Kevin","Aidan","Chris","Simon","Shrisay","Calder","Samuel","Daniel"]
@@ -33,8 +32,10 @@ class Blockchain:
             'timestamp': str(datetime.datetime.now()),
             'nonce': proof,
             'previous_hash': previous_hash,
-            'transactions': transactions[-1]  # Get the last transaction in the list
+            'transactions': transactions[-1],# Get the last transaction in the list
+            'TransactionsHist': transactions
         }
+        
         self.chain.append(block)
         return block
 
@@ -65,6 +66,7 @@ class Blockchain:
         end_time = time.time()
         times.append(end_time - start_time)
         print(times)
+       
         plt.hist(times, bins = 10)
         plt.title = ("Epic Graph")
         plt.show
