@@ -1,0 +1,4 @@
+Adjusted add_transaction to check if there is enough balance. 
+A bit unsure of how each endpoint interacts with one another. Unsure how to proceed with other tasks. 
+
+Attempted to make GUI, didn't work out. Couldn't figure out how to use tkinter. 

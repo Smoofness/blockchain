@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 import argparse
 
 
+
 class Blockchain:
     def __init__(self):
         self.chain = []
@@ -88,6 +89,15 @@ class Blockchain:
             self.chain = longest_chain
             return True
         return False
+    def get_balance(self, user):
+        balance = 0
+        for block in self.chain:
+            for tx in block['transactions']:
+                if tx['sender'] == user:
+                    balance -= tx['amount']
+                elif tx['receiver'] == user:
+                    balance += tx['amount']
+        return balance
 
 
 # Creating a Web App
@@ -98,6 +108,7 @@ node_address = str(uuid4()).replace('-', '')
 
 # Creating a Blockchain
 blockchain = Blockchain()
+
 
 
 @app.route('/mine_block', methods=['GET'])
@@ -116,6 +127,8 @@ def mine_block():
                 'proof': block['proof'],
                 'previous_hash': block['previous_hash'],
                 'transactions': block['transactions']}
+    
+    
     return jsonify(response), 200
 
 
@@ -146,10 +159,23 @@ def add_transaction():
     transaction_keys = ['sender', 'receiver', 'amount']
     if not all(key in json for key in transaction_keys):
         return 'Some elements of the transaction are missing', 400
+    
+    sender = json['sender']
+    receiver = json['receiver']
+    amount = json['amount']
+    
+    sender_balance = blockchain.get_balance(sender)
+    if sender_balance < amount:
+        return 'Insufficient balance for the transaction', 400
+    
     index = blockchain.add_transaction(
         json['sender'], json['receiver'], json['amount'])
+    sender_balance = blockchain.get_balance(sender)
     response = {'message': f'This transaction will be added to Block {index}'}
+    messagebox.showinfo("Transaction Added", "Transaction added successfully!")
     return jsonify(response), 201
+
+
 
 
 @app.route('/connect_node', methods=['POST'])
@@ -182,6 +208,7 @@ def replace_chain():
 parser = argparse.ArgumentParser()
 parser.add_argument('--port', type=int, default=5000, help='port to listen on')
 args = parser.parse_args()
+
 
 # Running the app
 app.run(host='0.0.0.0', port=args.port)
