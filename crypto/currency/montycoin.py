@@ -15,6 +15,7 @@ class Blockchain:
         self.transactions = []
         self.create_block(proof=1, previous_hash='0')
         self.nodes = set()
+        
 
     def create_block(self, proof, previous_hash):
         block = {'index': len(self.chain) + 1,
@@ -120,6 +121,8 @@ def mine_block():
     previous_hash = blockchain.hash(previous_block)
     blockchain.add_transaction(
         sender=node_address, receiver='monty', amount=1)
+    blockchain.add_transaction(
+        sender="reward", receiver=node_address, amount = 10)
     block = blockchain.create_block(proof, previous_hash)
     response = {'message': 'Congratulations, you just mined a block!',
                 'index': block['index'],
