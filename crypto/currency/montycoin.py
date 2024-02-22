@@ -13,9 +13,18 @@ class Blockchain:
     def __init__(self):
         self.chain = []
         self.transactions = []
-        self.create_block(proof=1, previous_hash='0')
+        self.create_genesis_block()
         self.nodes = set()
         
+    def create_genesis_block(self):
+        
+        genesis_coinbase_transaction = {
+            'sender': None, 
+            'receiver': 'miner_address', 
+            'amount': 50  
+        }
+        self.transactions.append(genesis_coinbase_transaction)
+        self.create_block(proof=1, previous_hash='0')
 
     def create_block(self, proof, previous_hash):
         block = {'index': len(self.chain) + 1,
@@ -94,8 +103,11 @@ class Blockchain:
         balance = 0
         for block in self.chain:
             for tx in block['transactions']:
-                if tx['sender'] == user:
-                    balance -= tx['amount']
+                if tx['sender'] == "reward":
+                    return 100000
+                elif tx['sender'] == user:
+                    if tx['sender'] is not None:
+                        balance -= tx['amount']
                 elif tx['receiver'] == user:
                     balance += tx['amount']
         return balance
