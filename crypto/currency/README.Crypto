@@ -10,3 +10,6 @@ I made the reward just an extra transaction where the sender was "reward".
 However, I suspected it checked balance for "reward" and given it didn't exist would make the transaction void.
 So, in my check balance function, I added that if the sender is reward, to return 10000 as the balance. 
 I'm unsure if this is fully functional, but I'm happy with the adjustments. 
+
+Added html and css for three buttons. 
+No postman integration, but it has gradients so they look nice. 

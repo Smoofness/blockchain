@@ -1,11 +1,13 @@
 import datetime
 import hashlib
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import requests
 from uuid import uuid4
 from urllib.parse import urlparse
 import argparse
+
+
 
 
 
@@ -124,6 +126,11 @@ blockchain = Blockchain()
 
 
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template('index.html')
+
+    
 @app.route('/mine_block', methods=['GET'])
 # Mining a new block
 def mine_block():
